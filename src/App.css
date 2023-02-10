@@ -58,7 +58,6 @@
   font-weight: bold;
 }
 .App .content {
-  background-color: #f2f2f2;
   height: 100vh;
 }
 .App .content__header {
@@ -71,4 +70,52 @@
 
 .App .btn-nav{
   transition: all 0.5s linear;
+}
+
+.transitions-wrapper {
+  position: relative;
+  overflow: hidden;
+  height: calc(var(--vh, 1vh) * 100);
+  width: 100vw;
+}
+.right-enter {
+  transform: translateX(100%);
+}
+
+.right-enter-active {
+  transform: translateX(0);
+  transition: transform 400ms ease-in-out;
+}
+
+.right-exit {
+  transform: translateX(0);
+}
+
+.right-exit-active {
+  transform: translateX(-100%);
+  transition: transform 400ms ease-in-out;
+}
+
+.left-enter {
+  /* z-index: 0; */
+  transform: translateX(-100%);
+}
+
+.left-enter-active {
+  /* z-index: 1; */
+  transform: translateX(0);
+  transition: transform 400ms ease-in-out;
+  /* transition-timing-function: ease-in-out; */
+}
+
+.left-exit {
+  /* z-index: 1; */
+  transform: translateX(0);
+}
+
+.left-exit-active {
+  /* z-index: 0; */
+  transform: translateX(100%);
+  transition: transform 400ms ease-in-out;
+  /* transition-timing-function: ease-in-out; */
 }

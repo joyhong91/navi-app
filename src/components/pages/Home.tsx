@@ -1,9 +1,15 @@
-import { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default function Home() {
+type StyleProps = {
+    style: React.CSSProperties;
+}
+export default function Home({ style }: StyleProps) {
     return <>
-        <p> Home </p>
-        <Link to='/1'>Go to details</Link>
+        <div>
+            <p> Home </p>
+            <Link to='/1'>Go to details</Link>
+        </div>
+
     </>
 }
