@@ -1,79 +1,95 @@
-import { useEffect, useRef, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import jsonData from '../../db/data.json';
-import FadeInOut from "../transition/FadeInOut";
+
+import { useEffect, useRef, useState } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 export default function Detail() {
     const navigate = useNavigate();
+    const directionClassName = useRef('right');
     const { page } = useParams();
     const [currentPage, setCurrentPage] = useState(Number(page));
-    const [touchPosition, setTouchPosition] = useState(null)
+    const [touchPosition, setTouchPosition] = useState(null);
+    
 
     const pages = jsonData.pages;
     const [FIRST_PAGE, MAX_PAGE] = [1, pages.length];
     const detail = pages.find(item => item.page === currentPage);
 
-    const [show, setShow] = useState(false);
-
-    const moveToPage = (dir: number) => {
-        const newPage = dir === 1 ? currentPage + 1 : currentPage - 1;
+    const moveToPage = (direction: number) => {
+        let newPage;
+        if (direction === 1) {
+            newPage = currentPage + 1;
+            directionClassName.current = 'right';
+        } else {
+            newPage = currentPage - 1;
+            directionClassName.current = 'left';
+        }
         setCurrentPage(newPage);
     };
 
-    const handleTouchStart = (e: any) => {
-        const touchDown = e.touches[0].clientX;
-        setTouchPosition(touchDown)
+    const handleTouchStart = (event: any) => {
+        const touchDown = event.touches[0].clientX;
+        setTouchPosition(touchDown);
     }
 
-    const handleTouchMove = (e: any) => {
-        const touchDown = touchPosition
+    const handleTouchMove = (event: any) => {
+        const touchDown = touchPosition;
 
         if (touchDown === null) {
-            return
+            return;
         }
 
-        const currentTouch = e.touches[0].clientX
-        const diff = touchDown - currentTouch
+        const currentTouch = event.touches[0].clientX;
+        const diff = touchDown - currentTouch;
 
         if (diff > 5 && currentPage < MAX_PAGE) {
+            directionClassName.current = 'right';
             moveToPage(1);
         }
 
         if (diff < -5 && currentPage > FIRST_PAGE) {
+            directionClassName.current = 'left';
             moveToPage(-1);
         }
 
-        setTouchPosition(null)
+        setTouchPosition(null);
     }
 
     useEffect(() => {
-        navigate(`/${currentPage}`);
+        navigate(`/${currentPage}`, {
+            state: { slideDirection: directionClassName.current }
+        });
     }, [currentPage]);
 
-    useEffect(() => {
-    }, [])
-
     return (
-        <FadeInOut show={show} duration={500}>
-            <div className="content" onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
-                <div className="content__header">
-                    {
-                        currentPage > FIRST_PAGE
-                            ? <button type="button" className="btn-nav" onClick={() => { moveToPage(-1) }}>뒤로가기</button>
-                            : null
-                    }
-                    <h1> {detail?.title} </h1>
-                </div>
-                <div className="content__body">
-                    <p> {detail?.desc} </p>
-                    {
-                        currentPage < MAX_PAGE
-                            ? <button type="button" className="btn-nav" onClick={() => { moveToPage(1) }}>다음</button>
-                            : null
-                    }
-                </div>
+        <div className="App-body">
+            <div className="App-btn-wrapper">
+                {
+                    currentPage > FIRST_PAGE
+                        ? <Link to="#" onClick={() => { moveToPage(-1) }}> &lt; Go Back {currentPage - 1}</Link>
+                        : <Link to="/"> &#60; Home</Link>
+                }
             </div>
-        </FadeInOut>
+            <TransitionGroup className="transitions-wrapper">
+                <CSSTransition key={currentPage} classNames={directionClassName.current} timeout={500}>
+                    <div className="content" onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
+                        <div className="content-header">
+                            <h1> {detail?.title} </h1>
+                        </div>
+                        <div className="divider"></div>
+                        <div className="content-body">
+                            <p> {detail?.desc} </p>
+                            {
+                                currentPage < MAX_PAGE
+                                    ? <Link to="#" onClick={() => { moveToPage(1) }}>Go to {currentPage + 1} &gt;</Link>
+                                    : null
+                            }
+                        </div>
+                    </div>
+                </CSSTransition>
+            </TransitionGroup>
+        </div>
     )
 
 }
