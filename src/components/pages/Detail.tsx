@@ -1,24 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
 import jsonData from '../../db/data.json';
 
-type StyleProps = {
-    style: React.CSSProperties;
-}
-export default function Detail({style}:StyleProps) {
+import { useEffect, useRef, useState } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
+
+export default function Detail() {
     const navigate = useNavigate();
     const directionClassName = useRef('right');
     const { page } = useParams();
     const [currentPage, setCurrentPage] = useState(Number(page));
-    const [touchPosition, setTouchPosition] = useState(null)
+    const [touchPosition, setTouchPosition] = useState(null);
     
+
     const pages = jsonData.pages;
     const [FIRST_PAGE, MAX_PAGE] = [1, pages.length];
     const detail = pages.find(item => item.page === currentPage);
 
     const moveToPage = (direction: number) => {
         let newPage;
-        if(direction === 1) {
+        if (direction === 1) {
             newPage = currentPage + 1;
             directionClassName.current = 'right';
         } else {
@@ -58,28 +58,37 @@ export default function Detail({style}:StyleProps) {
 
     useEffect(() => {
         navigate(`/${currentPage}`, {
-            state: { slideDirection: directionClassName.current}
+            state: { slideDirection: directionClassName.current }
         });
     }, [currentPage]);
 
     return (
-        <div className="content" onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
-            <div className="content__header">
+        <div className="App-body">
+            <div className="App-btn-wrapper">
                 {
                     currentPage > FIRST_PAGE
-                        ? <button type="button" className="btn-nav" onClick={() => { moveToPage(-1) }}>뒤로가기</button>
-                        : null
-                }
-                <h1> {detail?.title} </h1>
-            </div>
-            <div className="content__body">
-                <p> {detail?.desc} </p>
-                {
-                    currentPage < MAX_PAGE
-                        ? <Link to="#" onClick={()=> {moveToPage(1)}}>Go to {currentPage+1}</Link>
-                        : null
+                        ? <Link to="#" onClick={() => { moveToPage(-1) }}> &lt; Go Back {currentPage - 1}</Link>
+                        : <Link to="/"> &#60; Home</Link>
                 }
             </div>
+            <TransitionGroup className="transitions-wrapper">
+                <CSSTransition key={currentPage} classNames={directionClassName.current} timeout={500}>
+                    <div className="content" onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
+                        <div className="content-header">
+                            <h1> {detail?.title} </h1>
+                        </div>
+                        <div className="divider"></div>
+                        <div className="content-body">
+                            <p> {detail?.desc} </p>
+                            {
+                                currentPage < MAX_PAGE
+                                    ? <Link to="#" onClick={() => { moveToPage(1) }}>Go to {currentPage + 1} &gt;</Link>
+                                    : null
+                            }
+                        </div>
+                    </div>
+                </CSSTransition>
+            </TransitionGroup>
         </div>
     )
 

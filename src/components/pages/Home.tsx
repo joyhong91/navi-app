@@ -1,10 +1,6 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 
-type StyleProps = {
-    style: React.CSSProperties;
-}
-export default function Home({ style }: StyleProps) {
+export default function Home() {
     return <>
         <div>
             <p> Home </p>
