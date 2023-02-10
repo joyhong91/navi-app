@@ -1,4 +1,4 @@
-import data from '../../db/data.json';
+import data from '../db/data.json';
 
 import { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
