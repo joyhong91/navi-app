@@ -42,6 +42,8 @@
 /* custom */
 .App {
   padding: 20px;
+  position: fixed;
+  width: 100vw;
 }
 
 .App .App-body {

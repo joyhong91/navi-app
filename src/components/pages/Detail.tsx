@@ -1,4 +1,4 @@
-import jsonData from '../../db/data.json';
+import data from '../../db/data.json';
 
 import { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
@@ -12,7 +12,7 @@ export default function Detail() {
     const [touchPosition, setTouchPosition] = useState(null);
     
 
-    const pages = jsonData.pages;
+    const pages = data.pages;
     const [FIRST_PAGE, MAX_PAGE] = [1, pages.length];
     const detail = pages.find(item => item.page === currentPage);
 
@@ -42,13 +42,18 @@ export default function Detail() {
 
         const currentTouch = event.touches[0].clientX;
         const diff = touchDown - currentTouch;
-
+        
         if (diff > 5 && currentPage < MAX_PAGE) {
             directionClassName.current = 'right';
             moveToPage(1);
         }
 
-        if (diff < -5 && currentPage > FIRST_PAGE) {
+        if (diff < -5 && currentPage >= FIRST_PAGE) {
+            if(currentPage === FIRST_PAGE) {
+                navigate("/");
+                return;
+            }
+
             directionClassName.current = 'left';
             moveToPage(-1);
         }
@@ -57,9 +62,7 @@ export default function Detail() {
     }
 
     useEffect(() => {
-        navigate(`/${currentPage}`, {
-            state: { slideDirection: directionClassName.current }
-        });
+        navigate(`/${currentPage}`);
     }, [currentPage]);
 
     return (
