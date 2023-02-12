@@ -1,12 +1,10 @@
-# Getting Started with Create React App
+# Navigation app
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
+react + typescript
 ## Available Scripts
 
 In the project directory, you can run:
-### `npm install`
-### `npm start`
+### `npm install` >> `npm start`
 
 
 ## Components
