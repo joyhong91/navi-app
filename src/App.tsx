@@ -1,20 +1,16 @@
 import './App.css';
-
+import {page_1_1, page_1_2, page_2_1, page_3_1} from './components/index';
 import Home from './components/Home';
-import Detail from './components/Detail';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
 
 function App() {
-
+  const pages = {
+    "tab1": [page_1_1(), page_1_2()],
+    "tab2": [page_2_1()],
+    "tab3": [page_3_1()]
+  }
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/:page" element={<Detail />} />
-        </Routes>
-      </BrowserRouter>
+      <Home pages={pages}/>
     </div>
   );
 }
