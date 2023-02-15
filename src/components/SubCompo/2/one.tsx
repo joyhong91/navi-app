@@ -1,6 +1,6 @@
 const One = () => {
     return <>
-        <div>1-1</div>
+         <h1>Sub Tab2 Component<br/>Tab2-1</h1>
     </>
 }
 

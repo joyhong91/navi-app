@@ -125,22 +125,27 @@
   transition: transform 400ms ease-in-out;
 }
 
+
+
+
+/* Template css */
 .App .content-header {
   display: flex;
   list-style: none;
   justify-content: space-evenly;
   padding-left: 0;
   margin-top: 0;
-  /* border-bottom: 1px solid #888; */
-  box-shadow: 0px 10px 10px -1px rgba(110,108,108,0.71);
--webkit-box-shadow: 0px 10px 10px -1px rgba(110,108,108,0.71);
--moz-box-shadow: 0px 10px 10px -1px rgba(110,108,108,0.71);
+  border-bottom: 1px solid #888;
+  /* box-shadow: 0px 10px 10px -1px rgba(110,108,108,0.71); */
+/* -webkit-box-shadow: 0px 10px 10px -1px rgba(110,108,108,0.71); */
+/* -moz-box-shadow: 0px 10px 10px -1px rgba(110,108,108,0.71); */
 }
 
 .App .content-header li:hover,
 .App .content-header li.active {
   background-color: #888;
 }
+
 .App .content-header li button {
   width: 50px;
   height: 50px;
@@ -148,4 +153,61 @@
   background: transparent;
 }
 
+.App .content-body .main-wrapper,
+.App .content-body .sub-wrapper {
+  visibility: hidden;
+  opacity: 0;
+  height: 0;
+}
 
+.App .content-body .main-wrapper.active,
+.App .content-body .sub-wrapper.active {
+  visibility: visible;
+  opacity: 1;
+  height: auto;
+  transition: opacity 500ms ease-in-out;
+}
+
+.fade-enter {
+  opacity: 0;
+  visibility: hidden;
+  height: 0;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  visibility: visible;
+  height: auto;
+  transition: opacity 500ms ease-in-out;
+}
+
+.fade-exit {
+  opacity: 1;
+  visibility: visible;
+  height: auto;
+}
+
+.fade-exit-active {
+  opacity: 0;
+  visibility: hidden;
+  height: 0;
+  transition: opacity 500ms ease-in-out;
+}
+
+.App .content-body .content {
+  position: absolute;
+  width: 100%;
+}
+
+.App .content-body .btn-nav{
+  position: absolute;
+  z-index: 99;
+}
+
+.App .content-body .btn-nav.right {
+  right: 0;
+}
+
+.App .content-body .btn-nav.left {
+  left: 0;
+}
