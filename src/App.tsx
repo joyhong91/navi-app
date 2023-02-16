@@ -1,17 +1,17 @@
 import './App.css';
-import page_1_1 from "./components/MainCompo/1/one";
-import page_1_2 from "./components/MainCompo/1/two";
-import page_2_1 from "./components/MainCompo/2/one";
-import page_3_1 from "./components/MainCompo/3/one";
-import page_3_2 from "./components/MainCompo/3/two";
-import page_3_3 from "./components/MainCompo/3/three";
+import FirstTab1 from "./components/Pages/FirstTab/FirstTab1";
+import SecondTab1 from "./components/Pages/FirstTab/SecondTab1";
+import FirstTab2 from "./components/Pages/SecondTab/FirstTab2";
+import SecondTab2 from "./components/Pages/SecondTab/SecondTab2";
+import ThirdTab2 from "./components/Pages/SecondTab/ThirdTab2";
+
 import TabComponent from './components/Template/TabComponent';
+
 
 function App() {
   const pages = {
-    "tab1": [page_1_1(), page_1_2()],
-    "tab2": [page_2_1()],
-    "tab3": [page_3_1(), page_3_2(), page_3_3()]
+    "tab1": [<FirstTab1/>, <SecondTab1/>],
+    "tab2": [<FirstTab2/>,<SecondTab2/>,<ThirdTab2/>]
   }
 
   return (

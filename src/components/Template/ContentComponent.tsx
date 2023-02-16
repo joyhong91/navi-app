@@ -1,63 +1,80 @@
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
+import { getHistoryByTab, getLastHistoryByTab, isHistoryEmpty, setHistoryStorage } from './History';
 
 export interface IContentProps {
     handleContentByTab: (tab: number) => void
+    goBackContent: () => void
 }
-
 interface Props {
-    props: [JSX.Element[][], string[], string]
-}
-
-const getStoredTabInfo = (tabList: string[], name: string) => {
-    let storedTab = JSON.parse(localStorage.getItem(`${name}-sub-tab`) || '{}');
-
-    if (!storedTab) {
-        storedTab = tabList.reduce((a, v) => ({ ...a, [v]: 0 }), {});
-        localStorage.setItem(`${name}-sub-tab`, JSON.stringify(storedTab));
+    props: {
+        name: string
+        contents: JSX.Element[][]
+        showHistoryBtn: () => void
     }
-
-    return storedTab;
 }
 
 const ContentComponent = forwardRef<IContentProps, Props>(({ props }, ref) => {
-    const [contentLists, tabList, name] = props;
-    const subTabStorage = getStoredTabInfo(tabList, name);
     const [tab, setTab] = useState(0);
-    const [subTab, setSubTab] = useState(subTabStorage[Object.keys(subTabStorage)[tab]]);
-    const [contents, setContents] = useState(contentLists[tab]);
+    const [contents, setContents] = useState(props.contents[tab]);
+    const [contentIndex, setContentIndex] = useState(0);
+    const [histories, setHistories] = useState(getHistoryByTab(tab, props.name))
 
     useImperativeHandle(ref, () => ({
         handleContentByTab: (tab) => {
             setTab(tab);
-            setSubTab(subTabStorage[Object.keys(subTabStorage)[tab]]);
-            setContents(contentLists[tab]);
+            setContents(props.contents[tab]);
+
+            if (isHistoryEmpty(tab, props.name)) {
+                setContentIndex(0);
+            } else {
+                setContentIndex(getLastHistoryByTab(tab, props.name) + 1);
+            }
+
+            setHistories(getHistoryByTab(tab, props.name))
+            props.showHistoryBtn();
         },
+        goBackContent: () => {
+            if (isHistoryEmpty(tab, props.name)) {
+                return;
+            }
+
+            const targetPage = histories.pop();
+
+            setContentIndex(targetPage);
+            setHistories(histories);
+            setHistoryStorage(tab, props.name, histories);
+        }
     }));
 
-    useEffect(() => {
-        subTabStorage[Object.keys(subTabStorage)[tab]] = subTab;
-        localStorage.setItem(`${name}-sub-tab`, JSON.stringify(subTabStorage));
-    }, [subTab]);
+    const moveToComponent = () => {
+        setContentIndex(contentIndex + 1);
+
+        const storedHistories = [...getHistoryByTab(tab, props.name)];
+        storedHistories.push(contentIndex);
+
+        setHistoryStorage(tab, props.name, storedHistories);
+        setHistories(storedHistories);
+
+        props.showHistoryBtn();
+    }
 
     return <>
         <div className="content-body">
-            {
-                contents.length > 1 && subTab > 0 ?
-                    <button className="btn-nav left" onClick={() => { setSubTab(subTab - 1) }}>이전</button> :
-                    null
-            }
-            {
-                <TransitionGroup className="content-wrapper">
-                    <CSSTransition key={subTab} classNames='fade' timeout={500}>
-                        <div className="content">{contents[subTab]}</div>
-                    </CSSTransition>
-                </TransitionGroup>
+            <ul className="content-list">
+                {contents.map((item, index) => (
+                    <li
+                        key={index}
+                        className={contentIndex === index ? "active" : ""}
+                    >
+                        {item}
+                    </li>
+                ))}
+            </ul>
 
-            }
             {
-                contents.length >= 1 && subTab + 1 < contents.length ?
-                    <button className="btn-nav right"  onClick={() => { setSubTab(subTab + 1) }}>다음</button> :
+                contents.length >= 1 && contentIndex + 1 < contents.length ?
+                    <button className="btn-nav right" onClick={moveToComponent}>다음</button> :
                     null
             }
         </div>

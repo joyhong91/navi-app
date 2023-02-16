@@ -14,7 +14,7 @@ In the project directory, you can run:
 
 ## Directory
 - src > components > Template > TabComponent.tsx
-- src > components > Template > contentComponent.tsx
+- src > components > Template > ContentComponent.tsx
 
 ## How to use?
 ```
