@@ -32,6 +32,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -41,26 +42,26 @@
 
 /* custom */
 .App {
-  padding: 20px;
-  position: fixed;
   width: 100vw;
 }
 
 .App .App-body {
   margin-top: 30px;
 }
+
 .App .App-body .App-btn-wrapper {
   text-align: left;
 }
-.App .App-body .App-btn-wrapper > a,
-.App .App-body .content-body > a{
+
+.App .App-body .App-btn-wrapper>a,
+.App .App-body .content-body>a {
   color: #666;
   text-decoration: none;
   font-size: 1.5rem;
 }
 
-.App .App-body .App-btn-wrapper > a:hover,
-.App .App-body .content-body > a:hover{
+.App .App-body .App-btn-wrapper>a:hover,
+.App .App-body .content-body>a:hover {
   font-weight: bold;
 }
 
@@ -83,6 +84,7 @@
   height: calc(var(--vh, 1vh) * 100);
   width: 100vw;
 }
+
 .right-enter {
   opacity: 0;
   transform: translateX(100%);
@@ -106,7 +108,7 @@
 }
 
 .left-enter {
-  opacity: 0;  
+  opacity: 0;
   transform: translateX(-100%);
 }
 
@@ -125,4 +127,96 @@
 .left-exit-active {
   transform: translateX(100%);
   transition: transform 400ms ease-in-out;
+}
+
+
+
+
+/* Template css */
+.App .content-header {
+  display: flex;
+  list-style: none;
+  justify-content: space-evenly;
+  padding-left: 0;
+  margin-top: 0;
+  border-bottom: 1px solid #888;
+  /* box-shadow: 0px 10px 10px -1px rgba(110,108,108,0.71); */
+  /* -webkit-box-shadow: 0px 10px 10px -1px rgba(110,108,108,0.71); */
+  /* -moz-box-shadow: 0px 10px 10px -1px rgba(110,108,108,0.71); */
+}
+
+.App .content-header li:hover,
+.App .content-header li.active {
+  background-color: #888;
+}
+
+.App .content-header li button {
+  width: 50px;
+  height: 50px;
+  border: none;
+  background: transparent;
+}
+
+.App .content-body .main-wrapper,
+.App .content-body .sub-wrapper {
+  visibility: hidden;
+  opacity: 0;
+  height: 0;
+}
+
+.App .content-body .main-wrapper.active,
+.App .content-body .sub-wrapper.active {
+  visibility: visible;
+  opacity: 1;
+  height: auto;
+  transition: opacity 500ms ease-in-out;
+}
+
+.fade-enter {
+  opacity: 0;
+  visibility: hidden;
+  height: 0;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  visibility: visible;
+  height: auto;
+  transition: opacity 500ms ease-in-out;
+}
+
+.fade-exit {
+  opacity: 1;
+  visibility: visible;
+  height: auto;
+}
+
+.fade-exit-active {
+  opacity: 0;
+  visibility: hidden;
+  height: 0;
+  transition: opacity 500ms ease-in-out;
+}
+
+.App .btn-history {
+  position: absolute;
+  left: 0;
+  top: 15px;
+  display: none;
+}
+
+.App .btn-history.active {
+  display: block;
+}
+
+.App .content-body .content-list {
+  list-style: none;
+}
+
+.App .content-body .content-list li {
+  display: none;
+}
+
+.App .content-body .content-list li.active {
+  display: block;
 }
